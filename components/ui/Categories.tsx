@@ -1,20 +1,21 @@
+import { AppDispatch, RootState } from '@/lib/redux'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 import ThemedText from '@/components/utils/ThemedText'
 import { categories } from '@/data'
-import { useState } from 'react'
+import { categoriesSlice } from '@/lib/redux'
 
 export default function Categories() {
-	const [categoryItem, setCategoryItem] = useState<string>('Food')
+	const dispatch = useDispatch<AppDispatch>()
+	const { setCategory } = categoriesSlice.actions
+	const { category } = useSelector((state: RootState) => state.category)
 
 	return (
 		<View style={styles.container}>
 			{categories.map((item, index) => (
-				<TouchableOpacity key={index} onPress={() => setCategoryItem(item)}>
-					<ThemedText
-						key={index}
-						style={[styles.text, categoryItem === item && styles.selectedText]}
-					>
+				<TouchableOpacity key={index} onPress={() => dispatch(setCategory(item))}>
+					<ThemedText key={index} style={[styles.text, category === item && styles.selectedText]}>
 						{item}
 					</ThemedText>
 				</TouchableOpacity>
