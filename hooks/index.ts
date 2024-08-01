@@ -1,3 +1,3 @@
-import useServerData from './useServerData'
+import usePlaces from './usePlaces'
 
-export { useServerData }
+export { usePlaces }
