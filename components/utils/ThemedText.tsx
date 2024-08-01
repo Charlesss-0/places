@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 	xl: {
 		fontSize: 32,
 		fontWeight: 'bold',
+		lineHeight: 32,
 	},
 	lg: {
 		fontSize: 20,

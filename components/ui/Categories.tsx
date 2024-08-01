@@ -1,17 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
+import ThemedText from '@/components/utils/ThemedText'
 import { categories } from '@/data'
+import { useState } from 'react'
 
 export default function Categories() {
+	const [categoryItem, setCategoryItem] = useState<string>('Food')
+
 	return (
 		<View style={styles.container}>
 			{categories.map((item, index) => (
-				<Text
-					key={index}
-					style={[styles.text, item === 'Food' ? { backgroundColor: '#efefef' } : {}]}
-				>
-					{item}
-				</Text>
+				<TouchableOpacity key={index} onPress={() => setCategoryItem(item)}>
+					<ThemedText
+						key={index}
+						style={[styles.text, categoryItem === item && styles.selectedText]}
+					>
+						{item}
+					</ThemedText>
+				</TouchableOpacity>
 			))}
 		</View>
 	)
@@ -23,13 +29,15 @@ const styles = StyleSheet.create({
 		padding: 20,
 		flexDirection: 'row',
 		justifyContent: 'space-around',
+		zIndex: 10,
 	},
 	text: {
-		fontSize: 13,
 		fontWeight: '400',
-		color: '#777777',
 		paddingVertical: 5,
 		paddingHorizontal: 10,
 		borderRadius: 6,
+	},
+	selectedText: {
+		backgroundColor: '#efefef',
 	},
 })

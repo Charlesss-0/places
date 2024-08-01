@@ -1,6 +1,5 @@
 import { Animated, Image, StyleSheet, View } from 'react-native'
 
-import { AntDesign } from '@expo/vector-icons'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import ThemedText from '@/components/utils/ThemedText'
 import { usePlaces } from '@/hooks'
@@ -31,7 +30,6 @@ export default function Places({ scrollY, top }: PlacesProps) {
 							borderRadius: 10,
 							backgroundColor: '#cfcfcf',
 							overflow: 'hidden',
-							position: 'relative',
 						}}
 					>
 						<Image
@@ -43,27 +41,6 @@ export default function Places({ scrollY, top }: PlacesProps) {
 								flex: 1,
 							}}
 						/>
-						<View
-							style={{
-								position: 'absolute',
-								bottom: 10,
-								right: 10,
-								borderRadius: 50,
-								padding: 5,
-								justifyContent: 'center',
-								alignContent: 'center',
-								backgroundColor: '#efefef',
-							}}
-						>
-							<AntDesign
-								name="hearto"
-								size={20}
-								color="#2f2f2f"
-								style={{
-									textAlign: 'center',
-								}}
-							/>
-						</View>
 					</View>
 
 					<View style={styles.footerTextContainer}>

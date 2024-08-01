@@ -9,7 +9,7 @@ export default function usePlaces() {
 	useEffect(() => {
 		const fetchInitialData = async () => {
 			try {
-				const response = await axios.get('http://192.168.1.15:3000/places')
+				const response = await axios.get('http://192.168.183.220:3000/places')
 				const data = response.data
 
 				const results = data.results
@@ -21,7 +21,7 @@ export default function usePlaces() {
 		fetchInitialData()
 
 		const connectWebSocket = () => {
-			const socket = new WebSocket('ws://192.168.1.15:3000')
+			const socket = new WebSocket('ws://192.168.183.220:3000')
 
 			socket.onopen = () => {
 				console.log('Connected to WebSocket server')
