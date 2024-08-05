@@ -1,3 +1,4 @@
-import usePlaces from './usePlaces'
+import useFetchPlaces from './useFetchPlaces'
+import useLocationPermission from './useLocationPermission'
 
-export { usePlaces }
+export { useFetchPlaces, useLocationPermission }

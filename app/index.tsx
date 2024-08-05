@@ -1,5 +1,5 @@
 import { Animated, StatusBar as RNStatusBar, SafeAreaView, StyleSheet } from 'react-native'
-import { DynamicHeader, Places } from '@/components'
+import { DynamicHeader, PlacesList } from '@/components'
 
 import { StatusBar } from 'expo-status-bar'
 import { useState } from 'react'
@@ -19,7 +19,7 @@ export default function Home() {
 				setCategoriesHeight={setCategoriesHeight}
 			/>
 
-			<Places scrollY={scrollY} top={headerHeight + categoriesHeight} />
+			<PlacesList scrollY={scrollY} top={headerHeight + categoriesHeight} />
 
 			<StatusBar backgroundColor="#ffffff" style="dark" />
 		</SafeAreaView>

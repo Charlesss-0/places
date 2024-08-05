@@ -1,9 +1,15 @@
+import { appSlice } from './appSlice'
 import { configureStore } from '@reduxjs/toolkit'
-import rootReducer from './slices'
+import { placesSlice } from './placesSlice'
+import { userSlice } from './userSlice'
 
 export const createAppStore = () => {
 	const store = configureStore({
-		reducer: rootReducer,
+		reducer: {
+			app: appSlice.reducer,
+			user: userSlice.reducer,
+			places: placesSlice.reducer,
+		},
 	})
 
 	return store

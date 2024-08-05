@@ -1,13 +1,25 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { AppDispatch, RootState, placesSlice } from '@/lib/redux'
+import { StyleSheet, TextInput, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Feather from '@expo/vector-icons/Feather'
 
 export default function SearchSection() {
+	const dispatch = useDispatch<AppDispatch>()
+	const { setQuery } = placesSlice.actions
+	const { query } = useSelector((state: RootState) => state.places)
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.searchContainer}>
 				<Feather name="search" size={20} />
-				<TextInput style={styles.input} placeholder="Search" placeholderTextColor="#777777" />
+				<TextInput
+					style={styles.input}
+					placeholder="Search"
+					placeholderTextColor="#777777"
+					value={query}
+					onChangeText={e => dispatch(setQuery(e))}
+				/>
 			</View>
 
 			<View style={styles.controlsContainer}>
