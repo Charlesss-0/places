@@ -1,6 +1,7 @@
-import AppStateManager from '@/hoc/AppStateManager'
+import { AppStateManager, StoreProvider } from '@/hoc'
+
 import { Stack } from 'expo-router'
-import StoreProvider from './storeProvider'
+import { StatusBar } from 'expo-status-bar'
 
 export default function RootLayout() {
 	return (

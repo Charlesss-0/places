@@ -3,7 +3,7 @@ import React, { SetStateAction } from 'react'
 
 import Categories from './Categories'
 import SearchSection from './SearchSection'
-import ThemedText from '../utils/ThemedText'
+import ThemedText from '../settings/ThemedText'
 
 interface DynamicHeaderProps {
 	scrollY: Animated.Value

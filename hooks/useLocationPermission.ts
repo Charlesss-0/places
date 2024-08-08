@@ -1,6 +1,6 @@
 import * as Location from 'expo-location'
 
-import { AppDispatch, appSlice, userSlice } from '@/lib/redux'
+import { AppDispatch, userSlice } from '@/lib/redux'
 
 import { Alert } from 'react-native'
 import { useCallback } from 'react'

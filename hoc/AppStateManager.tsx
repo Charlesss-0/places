@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useFetchPlaces, useLocationPermission } from '@/hooks'
+import React, { useEffect, useRef } from 'react'
+import { useFetch, useLocationPermission } from '@/hooks'
 
 import { RootState } from '@/lib/redux'
 import { useSelector } from 'react-redux'
 
 export default function AppStateManager({ children }: { children: React.ReactNode }) {
-	const { locationPermission, locationCoords } = useSelector((state: RootState) => state.user)
 	const { requestLocationPermission, getLocation } = useLocationPermission()
-	const { fetchPlaces } = useFetchPlaces()
+	const { locationPermission, locationCoords } = useSelector((state: RootState) => state.user)
+	const { fetchPlaces } = useFetch()
 	const hasFetched = useRef(false)
 
 	useEffect(() => {
@@ -26,13 +26,14 @@ export default function AppStateManager({ children }: { children: React.ReactNod
 		const fetchData = async () => {
 			if (locationCoords && !hasFetched.current) {
 				hasFetched.current = true
-				console.log('Fetching places data')
 
-				try {
-					await fetchPlaces('food', locationCoords, false)
-				} catch (error) {
-					console.log('Unable to retrieve data:', error)
+				const params = {
+					query: 'food',
+					pathName: '/',
+					nextFetch: false,
 				}
+
+				await fetchPlaces(params)
 			}
 		}
 		fetchData()

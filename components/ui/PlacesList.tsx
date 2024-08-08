@@ -1,35 +1,47 @@
-import { Animated, Image, Pressable, StyleSheet, View } from 'react-native'
+import { Alert, Animated, Image, Pressable, StyleSheet, View } from 'react-native'
 
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { RootState } from '@/lib/redux'
-import ThemedText from '@/components/utils/ThemedText'
-import { useFetchPlaces } from '@/hooks'
+import ThemedText from '@/components/settings/ThemedText'
+import { useFetch } from '@/hooks'
+import { usePathname } from 'expo-router'
 import { useSelector } from 'react-redux'
 
 interface PlacesProps {
+	data: Places[]
 	scrollY: any
-	top: number
+	top?: number
 }
 
-export default function PlacesList({ scrollY, top }: PlacesProps) {
-	const { places, query, category } = useSelector((state: RootState) => state.places)
-	const { locationCoords } = useSelector((state: RootState) => state.user)
-	const { fetchPlaces } = useFetchPlaces()
+export default function PlacesList({ data, scrollY, top }: PlacesProps) {
+	const pathName = usePathname()
+	const { query, category } = useSelector((state: RootState) => state.places)
 	const { hasNext } = useSelector((state: RootState) => state.app)
+	const { fetchPlaces } = useFetch()
 	const currentQuery = query ? query : category
 
 	const handleLoadMore = async () => {
-		await fetchPlaces(currentQuery, locationCoords, true)
+		try {
+			const params = {
+				query: currentQuery,
+				pathName: pathName,
+				nextFetch: true,
+			}
+
+			await fetchPlaces(params)
+		} catch (error) {
+			Alert.alert(`Error loading more places: ${error}`)
+		}
 	}
 
 	return (
 		<>
-			{places && (
+			{data && (
 				<Animated.FlatList
-					data={places}
+					data={data}
 					keyExtractor={({ fsq_id }) => fsq_id}
 					renderItem={({ item }) => (
-						<View style={styles.listContent}>
+						<View style={styles.listItems}>
 							<View style={styles.thumbnailContainer}>
 								{item.photos?.length > 0 ? (
 									<Image
@@ -68,40 +80,42 @@ export default function PlacesList({ scrollY, top }: PlacesProps) {
 									<ThemedText type="sm">Address not available</ThemedText>
 								)}
 
-								{item.distance ? (
-									<View
-										style={[
-											{
-												flex: 1,
-												gap: 5,
-												flexDirection: 'row',
-												alignItems: 'center',
-												justifyContent: 'flex-end',
-											},
-										]}
-									>
-										<FontAwesome6 name="location-dot" size={12} color="#2f2f2f" />
-										<ThemedText type="sm">{item.distance} mts</ThemedText>
+								<View
+									style={[
+										{
+											flex: 1,
+											gap: 5,
+											flexDirection: 'row',
+											alignItems: 'center',
+											justifyContent: 'flex-end',
+											alignSelf: 'flex-start',
+										},
+									]}
+								>
+									{item.distance ? (
+										<>
+											<FontAwesome6 name="location-dot" size={12} color="#2f2f2f" />
+											<ThemedText type="sm">{item.distance} mts</ThemedText>
 
-										<View
-											style={{
-												height: 10,
-												borderLeftWidth: 1,
-												borderColor: '#7f7f7f',
-											}}
-										></View>
-
-										{item.closed_bucket.includes('Open') ? (
-											<ThemedText type="sm">Open</ThemedText>
-										) : item.closed_bucket.includes('Closed') ? (
-											<ThemedText type="sm">Closed</ThemedText>
-										) : (
-											<ThemedText type="sm">Unsure</ThemedText>
-										)}
-									</View>
-								) : (
-									<ThemedText type="sm">Distance not available</ThemedText>
-								)}
+											<View
+												style={{
+													height: 10,
+													borderLeftWidth: 1,
+													borderColor: '#7f7f7f',
+												}}
+											></View>
+										</>
+									) : (
+										<ThemedText type="sm">Distance not available</ThemedText>
+									)}
+									{item.closed_bucket.includes('Open') ? (
+										<ThemedText type="sm">Open</ThemedText>
+									) : item.closed_bucket.includes('Closed') ? (
+										<ThemedText type="sm">Closed</ThemedText>
+									) : (
+										<ThemedText type="sm">Unsure</ThemedText>
+									)}
+								</View>
 							</View>
 						</View>
 					)}
@@ -112,7 +126,7 @@ export default function PlacesList({ scrollY, top }: PlacesProps) {
 						useNativeDriver: true,
 					})}
 					ListFooterComponent={() =>
-						places.length > 0 &&
+						data.length > 0 &&
 						hasNext && (
 							<Pressable
 								style={{
@@ -140,10 +154,10 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 	},
 	listContentContainer: {
-		paddingBottom: 20,
 		gap: 30,
+		paddingBottom: 20,
 	},
-	listContent: {
+	listItems: {
 		gap: 10,
 	},
 	thumbnailContainer: {

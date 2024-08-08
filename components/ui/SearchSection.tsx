@@ -1,13 +1,54 @@
+import { Alert, StyleSheet, TextInput, View } from 'react-native'
 import { AppDispatch, RootState, placesSlice } from '@/lib/redux'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { router, usePathname } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Feather from '@expo/vector-icons/Feather'
+import { placesApi } from '@/api'
+import { useFetch } from '@/hooks'
+import { useRef } from 'react'
 
 export default function SearchSection() {
+	const pathName = usePathname()
 	const dispatch = useDispatch<AppDispatch>()
 	const { setQuery } = placesSlice.actions
 	const { query } = useSelector((state: RootState) => state.places)
+	const { locationCoords } = useSelector((state: RootState) => state.user)
+	const { fetchPlaces } = useFetch()
+	const prevQuery = useRef('')
+
+	const handleSearch = async () => {
+		if (!locationCoords) {
+			Alert.alert('Please enable location services')
+			return
+		}
+
+		if (!query) {
+			Alert.alert('Please enter a value')
+			return
+		}
+
+		if (prevQuery.current === query) {
+			if (pathName === '/') {
+				router.push({ pathname: '/results' })
+			}
+			return
+		}
+
+		if (pathName === '/') {
+			router.push({ pathname: '/results' })
+		}
+
+		const params = {
+			query: query,
+			pathName: 'results',
+			nextFetch: false,
+		}
+
+		await fetchPlaces(params)
+
+		prevQuery.current = query
+	}
 
 	return (
 		<View style={styles.container}>
@@ -19,6 +60,7 @@ export default function SearchSection() {
 					placeholderTextColor="#777777"
 					value={query}
 					onChangeText={e => dispatch(setQuery(e))}
+					onSubmitEditing={handleSearch}
 				/>
 			</View>
 
