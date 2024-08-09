@@ -40,8 +40,8 @@ export default function useFetch() {
 				}
 
 				dispatch(setHasNext(hasNextPage))
-			} catch (error) {
-				Alert.alert(`Unable to fetch places: ${error}`)
+			} catch (error: any) {
+				Alert.alert(error.message)
 			}
 		},
 		[dispatch, locationCoords]

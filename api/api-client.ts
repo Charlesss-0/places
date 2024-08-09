@@ -1,5 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
 
+const apiUrl = process.env.EXPO_PUBLIC_API_URL as string
+
 class ApiClient {
 	private client: AxiosInstance
 
@@ -12,4 +14,4 @@ class ApiClient {
 	}
 }
 
-export default new ApiClient('http://192.168.1.15:3000')
+export default new ApiClient(apiUrl)
