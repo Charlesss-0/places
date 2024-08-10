@@ -1,43 +1,18 @@
-import { Alert, Animated, Image, Pressable, StyleSheet, View } from 'react-native'
+import { FlatList, Image, StyleSheet, View } from 'react-native'
 
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
+import LoadMoreBtn from '../ui/LoadMoreBtn'
 import { RootState } from '@/redux'
 import ThemedText from '@/components/settings/ThemedText'
-import { useFetch } from '@/hooks'
-import { usePathname } from 'expo-router'
 import { useSelector } from 'react-redux'
 
-interface PlacesProps {
-	data: Places[]
-	scrollY: any
-	top?: number
-}
-
-export default function PlacesList({ data, scrollY, top }: PlacesProps) {
-	const pathName = usePathname()
-	const { query, category } = useSelector((state: RootState) => state.places)
-	const { hasNext } = useSelector((state: RootState) => state.app)
-	const { fetchPlaces } = useFetch()
-	const currentQuery = query ? query : category
-
-	const handleLoadMore = async () => {
-		try {
-			const params = {
-				query: currentQuery,
-				pathName: pathName,
-				nextFetch: true,
-			}
-
-			await fetchPlaces(params)
-		} catch (error) {
-			Alert.alert(`Error loading more places: ${error}`)
-		}
-	}
+export default function DataList() {
+	const { data, hasNext } = useSelector((state: RootState) => state.data)
 
 	return (
 		<>
 			{data && (
-				<Animated.FlatList
+				<FlatList
 					data={data}
 					keyExtractor={({ fsq_id }) => fsq_id}
 					renderItem={({ item }) => (
@@ -120,28 +95,9 @@ export default function PlacesList({ data, scrollY, top }: PlacesProps) {
 						</View>
 					)}
 					style={styles.container}
-					contentContainerStyle={[styles.listContentContainer, { paddingTop: top }]}
+					contentContainerStyle={[styles.listContentContainer, { paddingBottom: hasNext ? 20 : 0 }]}
 					showsVerticalScrollIndicator={false}
-					onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-						useNativeDriver: true,
-					})}
-					ListFooterComponent={() =>
-						data.length > 0 &&
-						hasNext && (
-							<Pressable
-								style={{
-									padding: 10,
-									borderRadius: 10,
-									justifyContent: 'center',
-									alignItems: 'center',
-									backgroundColor: '#efefef',
-								}}
-								onPress={handleLoadMore}
-							>
-								<ThemedText>Load More</ThemedText>
-							</Pressable>
-						)
-					}
+					ListFooterComponent={() => <LoadMoreBtn shouldLoadMore={hasNext} />}
 				/>
 			)}
 		</>
@@ -155,7 +111,6 @@ const styles = StyleSheet.create({
 	},
 	listContentContainer: {
 		gap: 30,
-		paddingBottom: 20,
 	},
 	listItems: {
 		gap: 10,

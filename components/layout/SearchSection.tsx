@@ -1,18 +1,15 @@
 import { Alert, StyleSheet, TextInput, View } from 'react-native'
-import { AppDispatch, RootState, placesSlice } from '@/redux'
-import { router, usePathname } from 'expo-router'
+import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Feather from '@expo/vector-icons/Feather'
-import { placesApi } from '@/api'
 import { useFetch } from '@/hooks'
 import { useRef } from 'react'
 
 export default function SearchSection() {
-	const pathName = usePathname()
 	const dispatch = useDispatch<AppDispatch>()
-	const { setQuery } = placesSlice.actions
-	const { query } = useSelector((state: RootState) => state.places)
+	const { clearData, setQuery } = dataSlice.actions
+	const { query } = useSelector((state: RootState) => state.data)
 	const { locationCoords } = useSelector((state: RootState) => state.user)
 	const { fetchPlaces } = useFetch()
 	const prevQuery = useRef('')
@@ -29,25 +26,19 @@ export default function SearchSection() {
 		}
 
 		if (prevQuery.current === query) {
-			if (pathName === '/') {
-				router.push({ pathname: '/results' })
-			}
+			Alert.alert('Please enter another value')
 			return
 		}
 
-		if (pathName === '/') {
-			router.push({ pathname: '/results' })
+		dispatch(clearData())
+
+		try {
+			await fetchPlaces({ query: query, nextFetch: false })
+
+			prevQuery.current = query
+		} catch (error) {
+			Alert.alert(`Unable to load results for ${query}`)
 		}
-
-		const params = {
-			query: query,
-			pathName: 'results',
-			nextFetch: false,
-		}
-
-		await fetchPlaces(params)
-
-		prevQuery.current = query
 	}
 
 	return (

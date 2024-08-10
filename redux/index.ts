@@ -1,6 +1,6 @@
 import { type AppDispatch, type AppStore, type RootState, createAppStore } from './store'
-import { appSlice } from './appSlice'
 import { userSlice } from './userSlice'
-import { placesSlice } from './placesSlice'
+import { dataSlice } from './dataSlice'
+import { appSlice } from './appSlice'
 
-export { createAppStore, AppStore, RootState, AppDispatch, appSlice, userSlice, placesSlice }
+export { createAppStore, AppStore, RootState, AppDispatch, userSlice, dataSlice, appSlice }

@@ -1,19 +1,19 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 interface AppState {
-	hasNext: boolean
+	loading: boolean
 }
 
 const initialState: AppState = {
-	hasNext: false,
+	loading: false,
 }
 
 const appSlice = createSlice({
 	name: 'app',
 	initialState,
 	reducers: {
-		setHasNext: (state, action: PayloadAction<AppState['hasNext']>) => {
-			state.hasNext = action.payload
+		setLoading: (state, action: PayloadAction<AppState['loading']>) => {
+			state.loading = action.payload
 		},
 	},
 })

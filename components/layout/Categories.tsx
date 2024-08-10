@@ -1,5 +1,5 @@
-import { AppDispatch, RootState, placesSlice } from '@/redux'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, View } from 'react-native'
+import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
 import ThemedText from '@/components/settings/ThemedText'
@@ -9,29 +9,29 @@ import { useFetch } from '@/hooks'
 export default function Categories() {
 	const dispatch = useDispatch<AppDispatch>()
 	const { fetchPlaces } = useFetch()
-	const { setCategory } = placesSlice.actions
-	const { category } = useSelector((state: RootState) => state.places)
+	const { clearData, setCategory } = dataSlice.actions
+	const { category } = useSelector((state: RootState) => state.data)
 
 	const handlePress = async (item: string) => {
+		dispatch(clearData())
+
 		dispatch(setCategory(item))
 
-		const params = {
-			query: item,
-			pathName: '/',
-			nextFetch: false,
+		try {
+			await fetchPlaces({ query: item, nextFetch: false })
+		} catch (error) {
+			Alert.alert(`Error finding places for category: ${item}`)
 		}
-
-		await fetchPlaces(params)
 	}
 
 	return (
 		<View style={styles.container}>
 			{categories.map((item, index) => (
-				<TouchableOpacity key={index} onPress={() => handlePress(item)}>
+				<Pressable key={index} onPress={() => handlePress(item)}>
 					<ThemedText key={index} style={[styles.text, category === item && styles.selectedText]}>
 						{item}
 					</ThemedText>
-				</TouchableOpacity>
+				</Pressable>
 			))}
 		</View>
 	)
