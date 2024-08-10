@@ -1,7 +1,7 @@
 import { Animated, StyleSheet, View } from 'react-native'
 import { PlacesList, SearchSection } from '@/components'
 
-import { RootState } from '@/lib/redux'
+import { RootState } from '@/redux'
 import { useEffect } from 'react'
 import { useNavigation } from 'expo-router'
 import { useSelector } from 'react-redux'

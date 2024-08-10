@@ -1,4 +1,4 @@
-import { AppStore, createAppStore } from '@/lib/redux'
+import { AppStore, createAppStore } from '@/redux'
 import React, { useRef } from 'react'
 
 import { Provider } from 'react-redux'

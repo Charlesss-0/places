@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, TextInput, View } from 'react-native'
-import { AppDispatch, RootState, placesSlice } from '@/lib/redux'
+import { AppDispatch, RootState, placesSlice } from '@/redux'
 import { router, usePathname } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 

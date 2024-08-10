@@ -1,4 +1,4 @@
-import { AppDispatch, RootState, appSlice, placesSlice } from '@/lib/redux'
+import { AppDispatch, RootState, appSlice, placesSlice } from '@/redux'
 import { useCallback, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 

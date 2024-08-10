@@ -1,7 +1,7 @@
 import { Alert, Animated, Image, Pressable, StyleSheet, View } from 'react-native'
 
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import { RootState } from '@/lib/redux'
+import { RootState } from '@/redux'
 import ThemedText from '@/components/settings/ThemedText'
 import { useFetch } from '@/hooks'
 import { usePathname } from 'expo-router'

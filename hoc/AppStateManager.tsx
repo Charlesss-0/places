@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useFetch, useLocationPermission } from '@/hooks'
 
-import { RootState } from '@/lib/redux'
+import { RootState } from '@/redux'
 import { useSelector } from 'react-redux'
 
 export default function AppStateManager({ children }: { children: React.ReactNode }) {

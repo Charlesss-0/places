@@ -1,4 +1,4 @@
-import { AppDispatch, RootState, placesSlice } from '@/lib/redux'
+import { AppDispatch, RootState, placesSlice } from '@/redux'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
