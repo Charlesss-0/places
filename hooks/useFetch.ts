@@ -1,9 +1,9 @@
 import { AppDispatch, RootState, appSlice, dataSlice } from '@/redux'
-import { useCallback, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Alert } from 'react-native'
 import { placesApi } from '@/api'
+import { useCallback } from 'react'
 
 interface FetchParams {
 	query: string

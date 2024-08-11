@@ -34,12 +34,11 @@ export default function ThemedText({
 
 const styles = StyleSheet.create({
 	xl: {
-		fontSize: 32,
+		fontSize: 20,
 		fontWeight: 'bold',
-		lineHeight: 32,
 	},
 	lg: {
-		fontSize: 20,
+		fontSize: 18,
 	},
 	md: {
 		fontSize: 16,

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 
 import Categories from './Categories'
 import SearchSection from './SearchSection'
-import ThemedText from '../settings/ThemedText'
+import ThemedText from '@/components/settings/ThemedText'
 
 export default function DynamicHeader() {
 	const [greeting, setGreeting] = useState('')
@@ -12,13 +12,13 @@ export default function DynamicHeader() {
 		const currentHour = new Date().getHours()
 
 		if (currentHour >= 5 && currentHour < 12) {
-			setGreeting('Good Morning ⛅️')
+			setGreeting('Good Morning')
 		} else if (currentHour >= 12 && currentHour < 17) {
-			setGreeting('Good Afternoon ☀️')
+			setGreeting('Good Afternoon')
 		} else if (currentHour >= 17 && currentHour < 21) {
-			setGreeting('Good Evening 🌇')
+			setGreeting('Good Evening')
 		} else {
-			setGreeting('Good Night 🎑')
+			setGreeting('Good Night')
 		}
 	}, [])
 
@@ -38,10 +38,9 @@ export default function DynamicHeader() {
 const styles = StyleSheet.create({
 	headerContainer: {
 		zIndex: 10,
-		backgroundColor: '#fff',
+		backgroundColor: '#ffffff',
 	},
 	title: {
-		fontSize: 20,
 		marginVertical: 10,
 		marginHorizontal: 20,
 	},
