@@ -1,3 +1,4 @@
+import { Colors } from '@/constant/Colors'
 import { Text, type TextProps, StyleSheet } from 'react-native'
 
 interface ThemedTextProps extends TextProps {
@@ -13,7 +14,7 @@ export default function ThemedText({
 	type = 'default',
 	...rest
 }: ThemedTextProps) {
-	const color = light ? '#efefef' : dark ? '#000000' : '#7f7f7f'
+	const color = light ? Colors.light.lightGray : dark ? Colors.light.darkGray : Colors.light.gray
 
 	return (
 		<Text

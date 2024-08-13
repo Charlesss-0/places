@@ -2,6 +2,7 @@ import { Alert, StyleSheet, TextInput, View } from 'react-native'
 import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { Colors } from '@/constant/Colors'
 import Feather from '@expo/vector-icons/Feather'
 import { useFetch } from '@/hooks'
 import { useRef } from 'react'
@@ -48,7 +49,7 @@ export default function SearchSection() {
 				<TextInput
 					style={styles.input}
 					placeholder="Search"
-					placeholderTextColor="#777777"
+					placeholderTextColor={Colors.light.gray}
 					value={query}
 					onChangeText={e => dispatch(setQuery(e))}
 					onSubmitEditing={handleSearch}
@@ -56,7 +57,7 @@ export default function SearchSection() {
 			</View>
 
 			<View style={styles.controlsContainer}>
-				<Feather name="sliders" color="#efefef" size={20} />
+				<Feather name="sliders" color={Colors.light.lightGray} size={20} />
 			</View>
 		</View>
 	)
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		flexDirection: 'row',
 		alignItems: 'center',
-		backgroundColor: '#efefef',
+		backgroundColor: Colors.light.lightGray,
 	},
 	input: {
 		flex: 1,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
 	controlsContainer: {
 		borderRadius: 10,
 		padding: 9,
-		backgroundColor: '#2f2f2f',
+		backgroundColor: Colors.light.darkGray,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

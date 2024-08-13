@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { useEffect, useState } from 'react'
 
 import Categories from './Categories'
+import { Colors } from '@/constant/Colors'
 import SearchSection from './SearchSection'
 import ThemedText from '@/components/settings/ThemedText'
 
@@ -38,7 +39,7 @@ export default function DynamicHeader() {
 const styles = StyleSheet.create({
 	headerContainer: {
 		zIndex: 10,
-		backgroundColor: '#ffffff',
+		backgroundColor: Colors.light.background,
 	},
 	title: {
 		marginVertical: 10,

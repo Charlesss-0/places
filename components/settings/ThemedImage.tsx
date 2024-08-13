@@ -1,11 +1,7 @@
-import { Image, type ImageSourcePropType, StyleSheet } from 'react-native'
+import { Image, ImageProps, StyleSheet } from 'react-native'
 
-interface ThemedImageProps {
-	source: ImageSourcePropType
-}
-
-export default function ThemedImage({ source }: ThemedImageProps) {
-	return <Image source={source} style={styles.image} />
+export default function ThemedImage({ ...rest }: ImageProps) {
+	return <Image style={styles.image} {...rest} />
 }
 
 const styles = StyleSheet.create({

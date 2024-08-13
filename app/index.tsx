@@ -1,5 +1,5 @@
-import { Home } from '@/screens'
+import { HomeScreen } from '@/screens'
 
 export default function Index() {
-	return <Home />
+	return <HomeScreen />
 }

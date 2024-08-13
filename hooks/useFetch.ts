@@ -18,12 +18,12 @@ export default function useFetch() {
 
 	const fetchPlaces = useCallback(
 		async ({ query, nextFetch = false }: FetchParams): Promise<void> => {
+			dispatch(setLoading(true))
+
 			if (!locationCoords) {
 				Alert.alert('Please enable location services')
 				return
 			}
-
-			dispatch(setLoading(true))
 
 			try {
 				const { places, hasNextPage } = await placesApi.fetchPlaces({

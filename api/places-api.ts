@@ -22,18 +22,22 @@ class PlacesApi {
 		nextFetch = false,
 	}: FetchParams): Promise<{ places: Places[]; hasNextPage: boolean }> {
 		try {
-			const response = await apiClient.instance.get('/places/search', {
+			const response = await apiClient.instance.get('/places/search/test', {
 				params: {
 					query,
 					lat: locationCoords.latitude,
 					lon: locationCoords.longitude,
 					next: nextFetch.toString(),
 				},
+				headers: {
+					'x-api-key': process.env.EXPO_PUBLIC_API_KEY as string,
+				},
 			})
 
 			const { places, hasNextPage } = response.data
 
-			this.places = nextFetch ? [...this.places, ...places] : places
+			// this.places = nextFetch ? [...this.places, ...places] : places
+			this.places = response.data
 
 			return { places: this.places, hasNextPage }
 		} catch (error) {

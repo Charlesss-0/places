@@ -27,13 +27,7 @@ export default function AppStateManager({ children }: { children: React.ReactNod
 			if (locationCoords && !hasFetched.current) {
 				hasFetched.current = true
 
-				const params = {
-					query: 'food',
-					pathName: '/',
-					nextFetch: false,
-				}
-
-				await fetchPlaces(params)
+				await fetchPlaces({ query: 'food', nextFetch: false })
 			}
 		}
 		fetchData()

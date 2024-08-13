@@ -1,7 +1,8 @@
-import { Alert, Pressable, StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { Colors } from '@/constant/Colors'
 import ThemedText from '@/components/settings/ThemedText'
 import { categories } from '@/data'
 import { useFetch } from '@/hooks'
@@ -14,7 +15,6 @@ export default function Categories() {
 
 	const handlePress = async (item: string) => {
 		dispatch(clearData())
-
 		dispatch(setCategory(item))
 
 		try {
@@ -27,11 +27,11 @@ export default function Categories() {
 	return (
 		<View style={styles.container}>
 			{categories.map((item, index) => (
-				<Pressable key={index} onPress={() => handlePress(item)}>
+				<TouchableOpacity key={index} onPress={() => handlePress(item)} activeOpacity={0.5}>
 					<ThemedText key={index} style={[styles.text, category === item && styles.selectedText]}>
 						{item}
 					</ThemedText>
-				</Pressable>
+				</TouchableOpacity>
 			))}
 		</View>
 	)
@@ -52,6 +52,6 @@ const styles = StyleSheet.create({
 		borderRadius: 6,
 	},
 	selectedText: {
-		backgroundColor: '#efefef',
+		backgroundColor: Colors.light.lightGray,
 	},
 })

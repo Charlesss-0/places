@@ -1,13 +1,20 @@
 interface Places {
 	fsq_id: string
-	name: string
-	distance: number
 	categories: {
 		name: string
+		icon: {
+			prefix: string
+			suffix: string
+		}
 	}
 	closed_bucket: string
+	distance: number
 	location: {
-		address: string
+		address: string | null
+		country: string
+		locality: string
+		region: string
 	}
-	photos: string[] | []
+	name: string
+	photos: string[]
 }

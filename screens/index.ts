@@ -1,3 +1,4 @@
-import Home from './Home'
+import DetailsScreen from './DetailsScreen'
+import HomeScreen from './HomeScreen'
 
-export { Home }
+export { HomeScreen, DetailsScreen }
