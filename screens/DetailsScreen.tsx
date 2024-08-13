@@ -1,5 +1,6 @@
-import { FlatList, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useEffect, useState } from 'react'
+import { Alert, FlatList, Modal, StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native'
+import { FontAwesome6, Ionicons } from '@expo/vector-icons'
+import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 
 import { AppDimensions } from '@/constant'
@@ -8,6 +9,7 @@ import ImageViewer from 'react-native-image-zoom-viewer'
 import { RootState } from '@/redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ThemedImage from '@/components/settings/ThemedImage'
+import { ThemedText } from '@/components'
 import { images } from '@/assets/images'
 import { useSelector } from 'react-redux'
 
@@ -34,6 +36,10 @@ export default function DetailsScreen() {
 	return (
 		<SafeAreaView style={styles.container}>
 			<ImageListView item={currentItem} />
+			<PlaceDetails place={currentItem} />
+			<PlaceReviews />
+
+			<FooterButton />
 		</SafeAreaView>
 	)
 }
@@ -68,6 +74,7 @@ function ImageListView({ item }: { item: Places }) {
 						snapToAlignment="center"
 						snapToInterval={AppDimensions.width}
 						decelerationRate="fast"
+						pagingEnabled
 						horizontal
 					/>
 
@@ -91,6 +98,170 @@ function ImageListView({ item }: { item: Places }) {
 			) : (
 				<ThemedImage source={images.place} />
 			)}
+		</View>
+	)
+}
+
+function PlaceDetails({ place }: { place: Places }) {
+	return (
+		<View
+			style={{
+				paddingVertical: 10,
+				paddingHorizontal: 20,
+				gap: 10,
+			}}
+		>
+			<ThemedView>
+				<ThemedText dark>
+					{place.location.locality}, {place.location.region}
+				</ThemedText>
+
+				<ThemedView
+					style={{
+						gap: 10,
+					}}
+				>
+					<ThemedText dark>{place.categories.name}</ThemedText>
+
+					<ThemedImage
+						source={{ uri: `${place.categories.icon.prefix}88${place.categories.icon.suffix}` }}
+						height={20}
+						width={20}
+						style={{
+							backgroundColor: '#2f2f2f',
+							borderWidth: 2,
+							borderRadius: 50,
+						}}
+					/>
+				</ThemedView>
+			</ThemedView>
+
+			<ThemedView>
+				<ThemedView
+					style={{
+						flex: 1,
+						gap: 5,
+						justifyContent: 'flex-start',
+					}}
+				>
+					<Ionicons name="map-outline" size={12} color={Colors.light.text} />
+
+					{place.location.address ? (
+						<ThemedText type="sm" style={{ flex: 1 }} numberOfLines={2} ellipsizeMode="tail">
+							{place.location.address}
+						</ThemedText>
+					) : (
+						<ThemedText type="sm">Address not available</ThemedText>
+					)}
+				</ThemedView>
+
+				<ThemedView
+					style={{
+						flex: 1,
+						gap: 5,
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'flex-end',
+						alignSelf: 'flex-start',
+					}}
+				>
+					<FontAwesome6 name="location-dot" size={12} color={Colors.light.text} />
+
+					<ThemedText type="sm">{place.distance} mts</ThemedText>
+
+					<View
+						style={{
+							height: 10,
+							borderLeftWidth: 1,
+							borderColor: Colors.light.gray,
+						}}
+					></View>
+
+					{place.closed_bucket.includes('Open') ? (
+						<ThemedText type="sm">Open</ThemedText>
+					) : place.closed_bucket.includes('Closed') ? (
+						<ThemedText type="sm">Closed</ThemedText>
+					) : (
+						<ThemedText type="sm">Unsure</ThemedText>
+					)}
+				</ThemedView>
+			</ThemedView>
+
+			<View
+				style={{
+					margin: 'auto',
+					marginTop: 10,
+					width: '100%',
+					borderBottomWidth: 0.5,
+					borderBottomColor: Colors.light.gray,
+				}}
+			></View>
+		</View>
+	)
+}
+
+function PlaceReviews() {
+	return (
+		<View
+			style={{
+				paddingVertical: 10,
+				paddingHorizontal: 20,
+			}}
+		>
+			<ThemedText type="md" dark>
+				Reviews
+			</ThemedText>
+		</View>
+	)
+}
+
+function FooterButton() {
+	return (
+		<View
+			style={{
+				position: 'absolute',
+				bottom: 0,
+				left: 0,
+				right: 0,
+				paddingVertical: 10,
+				paddingHorizontal: 15,
+			}}
+		>
+			<TouchableOpacity
+				style={{
+					backgroundColor: Colors.light.darkGray,
+					paddingVertical: 10,
+					borderRadius: 10,
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+				activeOpacity={0.9}
+			>
+				<ThemedText style={{ fontWeight: '500' }} light>
+					Start Trip
+				</ThemedText>
+			</TouchableOpacity>
+		</View>
+	)
+}
+
+interface ThemedViewProps extends ViewProps {
+	children: React.ReactNode
+}
+
+function ThemedView({ style, children }: ThemedViewProps) {
+	return (
+		<View
+			style={[
+				{
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+				},
+				style,
+			]}
+		>
+			{children}
 		</View>
 	)
 }
