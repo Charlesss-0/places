@@ -23,7 +23,7 @@ class PlacesApi {
 		nextFetch = false,
 	}: FetchParams): Promise<{ places: Places[]; hasNextPage: boolean }> {
 		try {
-			const response = await apiClient.instance.get('/search', {
+			const response = await apiClient.instance.get('/test', {
 				params: {
 					query,
 					lat: locationCoords.latitude,
@@ -37,7 +37,8 @@ class PlacesApi {
 
 			const { places, hasNextPage } = response.data
 
-			this.places = nextFetch ? [...this.places, ...places] : places
+			// this.places = nextFetch ? [...this.places, ...places] : places
+			this.places = response.data
 
 			return { places: this.places, hasNextPage }
 		} catch (error) {

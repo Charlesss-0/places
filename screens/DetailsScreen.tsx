@@ -1,6 +1,4 @@
 import {
-	Alert,
-	Animated,
 	FlatList,
 	Modal,
 	ScrollView,
@@ -10,7 +8,8 @@ import {
 	ViewProps,
 } from 'react-native'
 import { FontAwesome6, Ionicons } from '@expo/vector-icons'
-import React, { useEffect, useRef, useState } from 'react'
+import MapView, { Marker } from 'react-native-maps'
+import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 
 import { AppDimensions } from '@/constant'
@@ -48,6 +47,7 @@ export default function DetailsScreen() {
 			<ImageListView item={currentItem} />
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<PlaceDetails place={currentItem} />
+				<Map />
 				<PlaceReviews />
 			</ScrollView>
 			<FooterButton />
@@ -207,6 +207,38 @@ function PlaceDetails({ place }: { place: Places }) {
 					borderBottomColor: Colors.light.gray,
 				}}
 			></View>
+		</View>
+	)
+}
+
+function Map() {
+	const region = {
+		latitude: 12.1291425,
+		longitude: -86.2664999,
+		latitudeDelta: 0.0922,
+		longitudeDelta: 0.0421,
+	}
+
+	return (
+		<View
+			style={{
+				height: 200,
+				marginBottom: 20,
+				marginHorizontal: 20,
+				borderRadius: 10,
+				overflow: 'hidden',
+			}}
+		>
+			<MapView style={{ height: '100%', width: '100%' }} region={region}>
+				<Marker
+					coordinate={{
+						latitude: region.latitude,
+						longitude: region.longitude,
+					}}
+					title=""
+					description=""
+				/>
+			</MapView>
 		</View>
 	)
 }
