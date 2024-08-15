@@ -1,7 +1,19 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+interface PlaceReviews {
+	id: string
+	text: string
+	created_at: string
+	photo: {
+		id: string
+		prefix: string
+		suffix: string
+	}
+}
+
 interface DataState {
 	data: Places[]
+	reviews: PlaceReviews[]
 	hasNext: boolean
 	query: string
 	category: string
@@ -9,6 +21,7 @@ interface DataState {
 
 const initialState: DataState = {
 	data: [],
+	reviews: [],
 	hasNext: false,
 	query: '',
 	category: 'Food',
@@ -23,6 +36,9 @@ const dataSlice = createSlice({
 		},
 		clearData: state => {
 			state.data = []
+		},
+		setReviews: (state, action: PayloadAction<DataState['reviews']>) => {
+			state.reviews = action.payload
 		},
 		setHasNext: (state, action: PayloadAction<DataState['hasNext']>) => {
 			state.hasNext = action.payload

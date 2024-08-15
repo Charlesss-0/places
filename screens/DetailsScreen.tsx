@@ -1,6 +1,16 @@
-import { Alert, FlatList, Modal, StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native'
+import {
+	Alert,
+	Animated,
+	FlatList,
+	Modal,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+	ViewProps,
+} from 'react-native'
 import { FontAwesome6, Ionicons } from '@expo/vector-icons'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 
 import { AppDimensions } from '@/constant'
@@ -30,15 +40,16 @@ export default function DetailsScreen() {
 	}, [])
 
 	if (!currentItem) {
-		return
+		return null
 	}
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<ImageListView item={currentItem} />
-			<PlaceDetails place={currentItem} />
-			<PlaceReviews />
-
+			<ScrollView showsVerticalScrollIndicator={false}>
+				<PlaceDetails place={currentItem} />
+				<PlaceReviews />
+			</ScrollView>
 			<FooterButton />
 		</SafeAreaView>
 	)
@@ -124,11 +135,11 @@ function PlaceDetails({ place }: { place: Places }) {
 					<ThemedText dark>{place.categories.name}</ThemedText>
 
 					<ThemedImage
-						source={{ uri: `${place.categories.icon.prefix}88${place.categories.icon.suffix}` }}
+						source={{ uri: `${place.categories.icon.prefix}120${place.categories.icon.suffix}` }}
 						height={20}
 						width={20}
 						style={{
-							backgroundColor: '#2f2f2f',
+							backgroundColor: Colors.light.darkGray,
 							borderWidth: 2,
 							borderRadius: 50,
 						}}
@@ -201,16 +212,95 @@ function PlaceDetails({ place }: { place: Places }) {
 }
 
 function PlaceReviews() {
+	const { reviews } = useSelector((state: RootState) => state.data)
+
+	const formatDate = (date: string) => {
+		const newDate = new Date(date)
+
+		return new Intl.DateTimeFormat('en-US', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		}).format(newDate)
+	}
+
 	return (
 		<View
 			style={{
-				paddingVertical: 10,
+				flex: 1,
+				gap: 5,
 				paddingHorizontal: 20,
+				paddingBottom: 60,
 			}}
 		>
 			<ThemedText type="md" dark>
 				Reviews
 			</ThemedText>
+
+			{reviews.length ? (
+				<>
+					{reviews.map(review => (
+						<View
+							key={review.id}
+							style={{
+								backgroundColor: Colors.light.lightGray,
+								padding: 10,
+								borderRadius: 10,
+								gap: 5,
+							}}
+						>
+							<ThemedText dark>{review.text}</ThemedText>
+
+							{review.photo && (
+								<ThemedImage
+									source={{ uri: `${review.photo.prefix}original${review.photo.suffix}` }}
+									height={150}
+									style={{ borderRadius: 5 }}
+								/>
+							)}
+
+							<ThemedText type="sm" style={{ textAlign: 'right' }}>
+								{formatDate(review.created_at)}
+							</ThemedText>
+						</View>
+					))}
+				</>
+			) : (
+				<ThemedText>No reviews</ThemedText>
+			)}
+
+			{/* <FlatList
+				data={reviews}
+				keyExtractor={item => item.id}
+				renderItem={({ item }) => (
+					<View
+						style={{
+							backgroundColor: Colors.light.lightGray,
+							padding: 10,
+							borderRadius: 10,
+							gap: 5,
+						}}
+					>
+						<ThemedText dark>{item.text}</ThemedText>
+
+						{item.photo ? (
+							<ThemedImage
+								source={{ uri: `${item.photo.prefix}original${item.photo.suffix}` }}
+								height={150}
+								style={{ borderRadius: 5 }}
+							/>
+						) : null}
+
+						<ThemedText type="sm" style={{ textAlign: 'right' }}>
+							{formatDate(item.created_at)}
+						</ThemedText>
+					</View>
+				)}
+				contentContainerStyle={{
+					gap: 5,
+				}}
+				showsVerticalScrollIndicator={false}
+			/> */}
 		</View>
 	)
 }

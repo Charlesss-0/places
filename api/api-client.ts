@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL as string
+// const apiUrlDev = process.env.EXPO_PUBLIC_API_URL_DEV as string
 
 class ApiClient {
 	private client: AxiosInstance

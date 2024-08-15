@@ -7,16 +7,17 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native'
+import { RootState, dataSlice } from '@/redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Colors } from '@/constant/Colors'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import { RootState } from '@/redux'
 import ThemedImage from '../settings/ThemedImage'
 import ThemedText from '@/components/settings/ThemedText'
 import { images } from '@/assets/images'
+import { placesApi } from '@/api'
 import { router } from 'expo-router'
 import { useFetch } from '@/hooks'
-import { useSelector } from 'react-redux'
 
 export default function DataList() {
 	const { data, hasNext } = useSelector((state: RootState) => state.data)
@@ -45,8 +46,17 @@ export default function DataList() {
 }
 
 function PressableThumbnail({ item }: { item: Places }) {
-	const handlePress = () => {
+	const dispatch = useDispatch()
+	const { setReviews } = dataSlice.actions
+
+	const handlePress = async () => {
 		router.push({ pathname: '/details', params: { id: item.fsq_id, name: item.name } })
+
+		const { reviews } = await placesApi.fetchReviews(item.fsq_id)
+
+		if (reviews) {
+			dispatch(setReviews(reviews))
+		}
 	}
 
 	return (

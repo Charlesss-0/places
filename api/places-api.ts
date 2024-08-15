@@ -11,6 +11,7 @@ interface FetchParams {
 
 class PlacesApi {
 	private places: Places[] = []
+	private reviews = []
 
 	constructor() {
 		this.fetchPlaces = this.fetchPlaces.bind(this)
@@ -22,7 +23,7 @@ class PlacesApi {
 		nextFetch = false,
 	}: FetchParams): Promise<{ places: Places[]; hasNextPage: boolean }> {
 		try {
-			const response = await apiClient.instance.get('/places/search/test', {
+			const response = await apiClient.instance.get('/search', {
 				params: {
 					query,
 					lat: locationCoords.latitude,
@@ -36,12 +37,32 @@ class PlacesApi {
 
 			const { places, hasNextPage } = response.data
 
-			// this.places = nextFetch ? [...this.places, ...places] : places
-			this.places = response.data
+			this.places = nextFetch ? [...this.places, ...places] : places
 
 			return { places: this.places, hasNextPage }
 		} catch (error) {
 			throw new Error(`Unable to fetch places: ${error}`)
+		}
+	}
+
+	public async fetchReviews(id: string) {
+		try {
+			const response = await apiClient.instance.get('/reviews', {
+				params: {
+					id: id,
+				},
+				headers: {
+					'x-api-key': process.env.EXPO_PUBLIC_API_KEY as string,
+				},
+			})
+
+			const { reviews } = response.data
+
+			this.reviews = reviews
+
+			return { reviews: this.reviews }
+		} catch (error: any) {
+			throw new Error(`Unable to fetch reviews: ${error.message}`)
 		}
 	}
 }
