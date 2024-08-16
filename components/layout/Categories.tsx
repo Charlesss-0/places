@@ -39,7 +39,6 @@ export default function Categories() {
 
 const styles = StyleSheet.create({
 	container: {
-		top: 0,
 		padding: 20,
 		flexDirection: 'row',
 		justifyContent: 'space-around',
@@ -49,9 +48,9 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		paddingVertical: 5,
 		paddingHorizontal: 10,
-		borderRadius: 6,
+		borderRadius: 5,
 	},
 	selectedText: {
-		backgroundColor: Colors.light.lightGray,
+		backgroundColor: Colors.lightGray,
 	},
 })

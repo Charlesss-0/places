@@ -1,20 +1,13 @@
-import {
-	ActivityIndicator,
-	Alert,
-	FlatList,
-	Pressable,
-	StyleSheet,
-	TouchableOpacity,
-	View,
-} from 'react-native'
+import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native'
+import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Colors } from '@/constant/Colors'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
+import PressableThumbnail from '../ui/PressableThumbnail'
 import ThemedImage from '../settings/ThemedImage'
 import ThemedText from '@/components/settings/ThemedText'
-import { images } from '@/assets/images'
+import globalStyles from '@/styles'
 import { placesApi } from '@/api'
 import { router } from 'expo-router'
 import { useFetch } from '@/hooks'
@@ -24,14 +17,13 @@ export default function DataList() {
 
 	return (
 		<>
-			{data && (
+			{data.length > 0 && (
 				<FlatList
 					data={data}
 					keyExtractor={({ fsq_id }) => fsq_id}
 					renderItem={({ item }) => (
 						<View style={styles.listItem}>
-							<PressableThumbnail item={item} />
-
+							<Thumbnail item={item} />
 							<FooterText item={item} />
 						</View>
 					)}
@@ -45,11 +37,13 @@ export default function DataList() {
 	)
 }
 
-function PressableThumbnail({ item }: { item: Places }) {
+function Thumbnail({ item }: { item: PlaceObject }) {
 	const dispatch = useDispatch()
-	const { setReviews } = dataSlice.actions
+	const { setReviews, clearReviews } = dataSlice.actions
 
 	const handlePress = async () => {
+		dispatch(clearReviews())
+
 		router.push({ pathname: '/details', params: { id: item.fsq_id, name: item.name } })
 
 		const { reviews } = await placesApi.fetchReviews(item.fsq_id)
@@ -59,71 +53,78 @@ function PressableThumbnail({ item }: { item: Places }) {
 		}
 	}
 
-	return (
-		<TouchableOpacity style={styles.pressableThumbnail} onPress={handlePress} activeOpacity={0.8}>
-			{item.photos?.length > 0 ? (
-				<ThemedImage source={{ uri: item.photos[0] }} />
-			) : (
-				<ThemedImage source={images.place} />
-			)}
-		</TouchableOpacity>
-	)
+	return <PressableThumbnail place={item} onPress={handlePress} style={styles.thumbnail} />
 }
 
-function FooterText({ item }: { item: Places }) {
+function FooterText({ item }: { item: PlaceObject }) {
 	return (
-		<View style={styles.footerTextContainer}>
-			<View style={styles.footerText}>
-				<ThemedText style={{ flex: 1 }} dark numberOfLines={2} ellipsizeMode="tail">
-					{item.name}
-				</ThemedText>
+		<View style={{ gap: 5 }}>
+			<View style={globalStyles.horizontalAlignment}>
+				<View style={[styles.cardTextSection, { justifyContent: 'flex-start' }]}>
+					<Ionicons name="home" size={12} color={Colors.darkGray} />
 
-				<ThemedText dark>{item.categories.name}</ThemedText>
+					<ThemedText dark>{item.name}</ThemedText>
+				</View>
+
+				<View style={styles.cardTextSection}>
+					<ThemedText dark>{item.categories[0].name}</ThemedText>
+
+					<ThemedImage
+						source={{
+							uri: `${item.categories[0].icon.prefix}88${item.categories[0].icon.suffix}`,
+						}}
+						height={20}
+						width={20}
+						style={{
+							backgroundColor: Colors.darkGray,
+							borderRadius: 50,
+						}}
+					/>
+				</View>
 			</View>
 
-			<View style={styles.footerText}>
-				{item.location.address ? (
-					<ThemedText type="sm" style={{ flex: 2 }} numberOfLines={2} ellipsizeMode="tail">
-						{item.location.address}
-					</ThemedText>
-				) : (
-					<ThemedText type="sm">Address not available</ThemedText>
-				)}
+			<View style={globalStyles.horizontalAlignment}>
+				<View style={[styles.cardTextSection, { justifyContent: 'flex-start' }]}>
+					<FontAwesome6 name="location-dot" size={12} color={Colors.darkGray} />
 
-				<View
-					style={[
-						{
-							flex: 1,
-							gap: 5,
-							flexDirection: 'row',
-							alignItems: 'center',
-							justifyContent: 'flex-end',
-							alignSelf: 'flex-start',
-						},
-					]}
-				>
+					{item.location.address ? (
+						<ThemedText type="sm" flex={1}>
+							{item.location.address}
+						</ThemedText>
+					) : (
+						<ThemedText type="sm">Address not available</ThemedText>
+					)}
+				</View>
+
+				<View style={styles.cardTextSection}>
 					{item.distance ? (
 						<>
-							<FontAwesome6 name="location-dot" size={12} color={Colors.light.text} />
-							<ThemedText type="sm">{item.distance} mts</ThemedText>
+							<Ionicons name="map-outline" size={12} color="#1c6e8c" />
+
+							<ThemedText type="sm" style={{ color: '#1c6e8c' }}>
+								{item.distance} mts
+							</ThemedText>
 
 							<View
 								style={{
 									height: 10,
 									borderLeftWidth: 1,
-									borderColor: Colors.light.gray,
+									borderColor: '#1c6e8c',
 								}}
 							></View>
 						</>
 					) : (
 						<ThemedText type="sm">Distance not available</ThemedText>
 					)}
-					{item.closed_bucket.includes('Open') ? (
-						<ThemedText type="sm">Open</ThemedText>
-					) : item.closed_bucket.includes('Closed') ? (
-						<ThemedText type="sm">Closed</ThemedText>
+
+					{item.hours.open_now ? (
+						<ThemedText type="sm" style={{ color: '#1c6e8c' }}>
+							Open
+						</ThemedText>
 					) : (
-						<ThemedText type="sm">Unsure</ThemedText>
+						<ThemedText type="sm" style={{ color: '#1c6e8c' }}>
+							Closed
+						</ThemedText>
 					)}
 				</View>
 			</View>
@@ -148,7 +149,7 @@ function LoadMoreBtn({ shouldLoadMore }: { shouldLoadMore: boolean }) {
 	return (
 		<>
 			{loading ? (
-				<ActivityIndicator size="large" color={Colors.light.darkGray} />
+				<ActivityIndicator size="large" color={Colors.darkGray} />
 			) : shouldLoadMore ? (
 				<Pressable
 					style={{
@@ -156,7 +157,7 @@ function LoadMoreBtn({ shouldLoadMore }: { shouldLoadMore: boolean }) {
 						borderRadius: 10,
 						justifyContent: 'center',
 						alignItems: 'center',
-						backgroundColor: Colors.light.lightGray,
+						backgroundColor: Colors.lightGray,
 					}}
 					onPress={handleLoadMore}
 				>
@@ -178,17 +179,18 @@ const styles = StyleSheet.create({
 	listItem: {
 		gap: 10,
 	},
-	pressableThumbnail: {
+	thumbnail: {
 		height: 180,
 		borderRadius: 10,
-		backgroundColor: Colors.light.lightGray,
+		backgroundColor: Colors.lightGray,
 		overflow: 'hidden',
 	},
-	footerTextContainer: {
+	cardTextSection: {
+		flex: 1,
 		gap: 5,
-	},
-	footerText: {
 		flexDirection: 'row',
-		justifyContent: 'space-between',
+		alignItems: 'center',
+		justifyContent: 'flex-end',
+		alignSelf: 'flex-start',
 	},
 })

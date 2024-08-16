@@ -10,6 +10,6 @@ const styles = StyleSheet.create({
 	image: {
 		flex: 1,
 		width: '100%',
-		backgroundColor: Colors.light.gray,
+		backgroundColor: Colors.gray,
 	},
 })

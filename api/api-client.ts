@@ -1,13 +1,18 @@
 import axios, { type AxiosInstance } from 'axios'
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL as string
-// const apiUrlDev = process.env.EXPO_PUBLIC_API_URL_DEV as string
+const apiKey = process.env.EXPO_PUBLIC_API_KEY as string
 
 class ApiClient {
 	private client: AxiosInstance
 
 	constructor(baseURL: string) {
-		this.client = axios.create({ baseURL })
+		this.client = axios.create({
+			baseURL,
+			headers: {
+				'x-api-key': apiKey,
+			},
+		})
 	}
 
 	get instance() {

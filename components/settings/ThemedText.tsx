@@ -5,21 +5,23 @@ interface ThemedTextProps extends TextProps {
 	light?: boolean
 	dark?: boolean
 	type?: 'default' | 'xl' | 'lg' | 'md' | 'sm' | 'link'
+	flex?: number
 }
 
 export default function ThemedText({
-	style,
 	light,
 	dark,
 	type = 'default',
+	flex,
+	style,
 	...rest
 }: ThemedTextProps) {
-	const color = light ? Colors.light.lightGray : dark ? Colors.light.darkGray : Colors.light.gray
+	const color = light ? Colors.lightGray : dark ? Colors.darkGray : Colors.gray
 
 	return (
 		<Text
 			style={[
-				{ color },
+				{ color, flex },
 				type === 'default' ? styles.default : undefined,
 				type === 'xl' ? styles.xl : undefined,
 				type === 'lg' ? styles.lg : undefined,
@@ -28,6 +30,8 @@ export default function ThemedText({
 				type === 'link' ? styles.link : undefined,
 				style,
 			]}
+			numberOfLines={2}
+			ellipsizeMode="tail"
 			{...rest}
 		/>
 	)

@@ -39,7 +39,7 @@ export default function DynamicHeader() {
 const styles = StyleSheet.create({
 	headerContainer: {
 		zIndex: 10,
-		backgroundColor: Colors.light.background,
+		backgroundColor: Colors.white,
 	},
 	title: {
 		marginVertical: 10,

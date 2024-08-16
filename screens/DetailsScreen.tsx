@@ -19,6 +19,7 @@ import { RootState } from '@/redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ThemedImage from '@/components/settings/ThemedImage'
 import { ThemedText } from '@/components'
+import globalStyles from '@/styles'
 import { images } from '@/assets/images'
 import { useSelector } from 'react-redux'
 
@@ -34,7 +35,7 @@ export default function DetailsScreen() {
 			headerShadowVisible: false,
 			headerTransparent: true,
 			headerTitleStyle: styles.headerTitle,
-			headerTintColor: Colors.light.lightGray,
+			headerTintColor: Colors.lightGray,
 		})
 	}, [])
 
@@ -55,10 +56,12 @@ export default function DetailsScreen() {
 	)
 }
 
-function ImageListView({ item }: { item: Places }) {
+function ImageListView({ item }: { item: PlaceObject }) {
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-	const imagesForZoom = item?.photos.map(uri => ({ url: uri }))
+	const imagesForZoom = item?.photos.map(photo => ({
+		url: `${photo.prefix}original${photo.suffix}`,
+	}))
 
 	const handleImagePress = (index: number) => {
 		setSelectedImageIndex(index)
@@ -78,7 +81,7 @@ function ImageListView({ item }: { item: Places }) {
 								activeOpacity={0.9}
 								onPress={() => handleImagePress(index)}
 							>
-								<ThemedImage source={{ uri: item }} />
+								<ThemedImage source={{ uri: `${item.prefix}original${item.suffix}` }} />
 							</TouchableOpacity>
 						)}
 						showsHorizontalScrollIndicator={false}
@@ -113,7 +116,7 @@ function ImageListView({ item }: { item: Places }) {
 	)
 }
 
-function PlaceDetails({ place }: { place: Places }) {
+function PlaceDetails({ place }: { place: PlaceObject }) {
 	return (
 		<View
 			style={{
@@ -122,40 +125,47 @@ function PlaceDetails({ place }: { place: Places }) {
 				gap: 10,
 			}}
 		>
-			<ThemedView>
+			<View style={globalStyles.horizontalAlignment}>
 				<ThemedText dark>
 					{place.location.locality}, {place.location.region}
 				</ThemedText>
 
-				<ThemedView
-					style={{
-						gap: 10,
-					}}
+				<View
+					style={[
+						globalStyles.horizontalAlignment,
+						{
+							gap: 10,
+						},
+					]}
 				>
-					<ThemedText dark>{place.categories.name}</ThemedText>
+					<ThemedText dark>{place.categories[0].name}</ThemedText>
 
 					<ThemedImage
-						source={{ uri: `${place.categories.icon.prefix}120${place.categories.icon.suffix}` }}
+						source={{
+							uri: `${place.categories[0].icon.prefix}88${place.categories[0].icon.suffix}`,
+						}}
 						height={20}
 						width={20}
 						style={{
-							backgroundColor: Colors.light.darkGray,
-							borderWidth: 2,
+							backgroundColor: Colors.darkGray,
 							borderRadius: 50,
 						}}
 					/>
-				</ThemedView>
-			</ThemedView>
+				</View>
+			</View>
 
-			<ThemedView>
-				<ThemedView
-					style={{
-						flex: 1,
-						gap: 5,
-						justifyContent: 'flex-start',
-					}}
+			<View style={globalStyles.horizontalAlignment}>
+				<View
+					style={[
+						globalStyles.horizontalAlignment,
+						{
+							flex: 1,
+							gap: 5,
+							justifyContent: 'flex-start',
+						},
+					]}
 				>
-					<Ionicons name="map-outline" size={12} color={Colors.light.text} />
+					<Ionicons name="map-outline" size={12} color={Colors.darkGray} />
 
 					{place.location.address ? (
 						<ThemedText type="sm" style={{ flex: 1 }} numberOfLines={2} ellipsizeMode="tail">
@@ -164,19 +174,22 @@ function PlaceDetails({ place }: { place: Places }) {
 					) : (
 						<ThemedText type="sm">Address not available</ThemedText>
 					)}
-				</ThemedView>
+				</View>
 
-				<ThemedView
-					style={{
-						flex: 1,
-						gap: 5,
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'flex-end',
-						alignSelf: 'flex-start',
-					}}
+				<View
+					style={[
+						globalStyles.horizontalAlignment,
+						{
+							flex: 1,
+							gap: 5,
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'flex-end',
+							alignSelf: 'flex-start',
+						},
+					]}
 				>
-					<FontAwesome6 name="location-dot" size={12} color={Colors.light.text} />
+					<FontAwesome6 name="location-dot" size={12} color={Colors.darkGray} />
 
 					<ThemedText type="sm">{place.distance} mts</ThemedText>
 
@@ -184,7 +197,7 @@ function PlaceDetails({ place }: { place: Places }) {
 						style={{
 							height: 10,
 							borderLeftWidth: 1,
-							borderColor: Colors.light.gray,
+							borderColor: Colors.gray,
 						}}
 					></View>
 
@@ -195,8 +208,8 @@ function PlaceDetails({ place }: { place: Places }) {
 					) : (
 						<ThemedText type="sm">Unsure</ThemedText>
 					)}
-				</ThemedView>
-			</ThemedView>
+				</View>
+			</View>
 
 			<View
 				style={{
@@ -204,7 +217,7 @@ function PlaceDetails({ place }: { place: Places }) {
 					marginTop: 10,
 					width: '100%',
 					borderBottomWidth: 0.5,
-					borderBottomColor: Colors.light.gray,
+					borderBottomColor: Colors.gray,
 				}}
 			></View>
 		</View>
@@ -275,7 +288,7 @@ function PlaceReviews() {
 						<View
 							key={review.id}
 							style={{
-								backgroundColor: Colors.light.lightGray,
+								backgroundColor: Colors.lightGray,
 								padding: 10,
 								borderRadius: 10,
 								gap: 5,
@@ -351,7 +364,7 @@ function FooterButton() {
 		>
 			<TouchableOpacity
 				style={{
-					backgroundColor: Colors.light.darkGray,
+					backgroundColor: Colors.darkGray,
 					paddingVertical: 10,
 					borderRadius: 10,
 					justifyContent: 'center',
@@ -367,31 +380,10 @@ function FooterButton() {
 	)
 }
 
-interface ThemedViewProps extends ViewProps {
-	children: React.ReactNode
-}
-
-function ThemedView({ style, children }: ThemedViewProps) {
-	return (
-		<View
-			style={[
-				{
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-				},
-				style,
-			]}
-		>
-			{children}
-		</View>
-	)
-}
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Colors.light.background,
+		backgroundColor: Colors.white,
 	},
 	headerTitle: {
 		fontWeight: '500',
