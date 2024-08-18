@@ -1,5 +1,5 @@
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native'
-import { FontAwesome6, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { FontAwesome6, Ionicons } from '@expo/vector-icons'
 import { RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,6 +8,7 @@ import PressableThumbnail from '../ui/PressableThumbnail'
 import ThemedImage from '../settings/ThemedImage'
 import ThemedText from '@/components/settings/ThemedText'
 import globalStyles from '@/styles'
+import { images } from '@/assets/images'
 import { placesApi } from '@/api'
 import { router } from 'expo-router'
 import { useFetch } from '@/hooks'
@@ -24,7 +25,8 @@ export default function DataList() {
 					renderItem={({ item }) => (
 						<View style={styles.listItem}>
 							<Thumbnail item={item} />
-							<FooterText item={item} />
+
+							<CardText item={item} />
 						</View>
 					)}
 					style={styles.container}
@@ -40,6 +42,7 @@ export default function DataList() {
 function Thumbnail({ item }: { item: PlaceObject }) {
 	const dispatch = useDispatch()
 	const { setReviews, clearReviews } = dataSlice.actions
+	const photos = item.photos.map(photo => `${photo.prefix}original${photo.suffix}`)
 
 	const handlePress = async () => {
 		dispatch(clearReviews())
@@ -53,10 +56,16 @@ function Thumbnail({ item }: { item: PlaceObject }) {
 		}
 	}
 
-	return <PressableThumbnail place={item} onPress={handlePress} style={styles.thumbnail} />
+	return (
+		<PressableThumbnail
+			source={{ uri: photos[0] }}
+			onPress={handlePress}
+			style={styles.thumbnail}
+		/>
+	)
 }
 
-function FooterText({ item }: { item: PlaceObject }) {
+function CardText({ item }: { item: PlaceObject }) {
 	return (
 		<View style={{ gap: 5 }}>
 			<View style={globalStyles.horizontalAlignment}>

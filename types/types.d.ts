@@ -21,6 +21,8 @@ interface PlaceObject {
 				amex?: boolean
 				visa?: boolean
 				master_card?: boolean
+				discover?: boolean
+				union_pay?: boolean
 			}
 			digital_wallet?: {
 				accepts_nfc: boolean
@@ -129,7 +131,6 @@ interface PlaceObject {
 	rating?: number
 	social_media?: {
 		twitter?: string
-		facebook_id?: string
 		instagram?: string
 	}
 	tips?: {

@@ -8,6 +8,7 @@ const globalStyles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
+		gap: 5,
 	},
 })
 
