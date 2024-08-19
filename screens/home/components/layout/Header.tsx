@@ -6,7 +6,7 @@ import { Colors } from '@/constant/Colors'
 import SearchSection from './SearchSection'
 import ThemedText from '@/components/settings/ThemedText'
 
-export default function DynamicHeader() {
+export default function Header() {
 	const [greeting, setGreeting] = useState('')
 
 	useEffect(() => {

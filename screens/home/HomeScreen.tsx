@@ -1,4 +1,4 @@
-import { DataList, Header } from '@/components'
+import { DataList, Header } from '@/screens/home/components'
 
 import { Colors } from '@/constant/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'

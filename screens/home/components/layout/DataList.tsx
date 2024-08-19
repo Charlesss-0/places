@@ -6,15 +6,12 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native'
+import { AddressInfo, DistanceInfo, PressableThumbnail, ThemedImage } from '@/components'
 import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
-import AddressInfo from '../ui/AddressInfo'
 import { Colors } from '@/constant/Colors'
-import DistanceInfo from '../ui/DistanceInfo'
 import { Ionicons } from '@expo/vector-icons'
-import PressableThumbnail from '../ui/PressableThumbnail'
-import ThemedImage from '../settings/ThemedImage'
 import ThemedText from '@/components/settings/ThemedText'
 import globalStyles from '@/styles'
 import { images } from '@/assets/images'
