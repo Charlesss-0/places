@@ -24,7 +24,7 @@ class PlacesApi {
 		nextFetch = false,
 	}: FetchParams): Promise<{ places: PlaceObject[]; hasNextPage: boolean }> {
 		try {
-			const response = await apiClient.instance.get('/search/test', {
+			const response = await apiClient.instance.get('/search', {
 				params: {
 					query,
 					lat: locationCoords.latitude,
@@ -63,7 +63,7 @@ class PlacesApi {
 
 	public async fetchReviews(fsq_id: string): Promise<{ reviews: ReviewObject[] }> {
 		try {
-			const response = await apiClient.instance.get('/reviews/test', {
+			const response = await apiClient.instance.get('/reviews', {
 				params: {
 					id: fsq_id,
 				},

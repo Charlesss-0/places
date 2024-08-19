@@ -25,28 +25,26 @@ export default function PlaceReviews() {
 				Reviews
 			</ThemedText>
 
-			{reviews.length ? (
-				<>
-					{reviews.map(review => (
-						<View key={review.id} style={styles.reviewContainer}>
-							<ThemedText numberOfLines={0} dark>
-								{review.text}
-							</ThemedText>
+			{reviews.length > 0 ? (
+				reviews.map(review => (
+					<View key={review.id} style={styles.reviewContainer}>
+						<ThemedText numberOfLines={0} dark>
+							{review.text}
+						</ThemedText>
 
-							{review.photo && (
-								<ThemedImage
-									source={{ uri: `${review.photo.prefix}original${review.photo.suffix}` }}
-									height={150}
-									style={{ borderRadius: 5 }}
-								/>
-							)}
+						{review.photo && (
+							<ThemedImage
+								source={{ uri: `${review.photo.prefix}original${review.photo.suffix}` }}
+								height={150}
+								style={{ borderRadius: 5 }}
+							/>
+						)}
 
-							<ThemedText type="sm" style={{ textAlign: 'right' }}>
-								{formatDate(review.created_at)}
-							</ThemedText>
-						</View>
-					))}
-				</>
+						<ThemedText type="sm" style={{ textAlign: 'right' }}>
+							{formatDate(review.created_at)}
+						</ThemedText>
+					</View>
+				))
 			) : (
 				<ThemedText>No reviews</ThemedText>
 			)}

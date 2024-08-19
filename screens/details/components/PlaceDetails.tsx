@@ -1,18 +1,10 @@
-import {
-	AntDesign,
-	FontAwesome5,
-	FontAwesome6,
-	Ionicons,
-	MaterialCommunityIcons,
-	MaterialIcons,
-} from '@expo/vector-icons'
+import { AddressInfo, DistanceInfo, ThemedText } from '@/components'
+import { AntDesign, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons'
 import { PlaceProvider, usePlace } from '../context/PlaceContext'
 import { StyleSheet, View } from 'react-native'
 
 import { Colors } from '@/constant'
-import React from 'react'
 import ThemedImage from '@/components/settings/ThemedImage'
-import { ThemedText } from '@/components'
 import globalStyles from '@/styles'
 
 export default function PlaceDetails({ place }: { place: PlaceObject }) {
@@ -29,7 +21,7 @@ export default function PlaceDetails({ place }: { place: PlaceObject }) {
 
 				<View style={globalStyles.horizontalAlignment}>
 					<AddressInfo address={place.location.address as string} />
-					<DistanceInfo distance={place.distance} status={place.hours.open_now} />
+					<DistanceInfo distance={place.distance} status={place.closed_bucket} />
 				</View>
 
 				<Features />
@@ -67,7 +59,7 @@ function CategoryInfo() {
 
 	return (
 		<View>
-			<View style={globalStyles.horizontalAlignment}>
+			<View style={[globalStyles.horizontalAlignment, { justifyContent: 'flex-end' }]}>
 				<ThemedImage source={{ uri: icon }} height={16} width={16} style={styles.categoryIcon} />
 				<ThemedText dark>Category</ThemedText>
 			</View>
@@ -75,54 +67,6 @@ function CategoryInfo() {
 			<ThemedText type="sm" style={{ textAlign: 'right' }}>
 				{categories[0].name || 'Category not available'}
 			</ThemedText>
-		</View>
-	)
-}
-
-function AddressInfo({ address }: { address: string }) {
-	return (
-		<View style={styles.flex}>
-			<View style={[globalStyles.horizontalAlignment, styles.addressInfo]}>
-				<FontAwesome6 name="location-dot" size={12} color={Colors.darkGray} />
-				<ThemedText dark>Address</ThemedText>
-			</View>
-
-			<ThemedText type="sm" numberOfLines={2} ellipsizeMode="tail">
-				{address || 'Address not available'}
-			</ThemedText>
-		</View>
-	)
-}
-
-function DistanceInfo({ distance, status }: { distance: number; status: boolean }) {
-	const formatDistance = () => {
-		if (distance >= 1000) {
-			return (distance / 1000).toFixed(2) + ' km'
-		}
-
-		return distance.toString() + ' mts'
-	}
-
-	const getStatusText = () => {
-		if (status) return 'Open'
-		if (!status) return 'Closed'
-		return 'Unsure'
-	}
-
-	return (
-		<View style={[styles.flex, { alignSelf: 'flex-start' }]}>
-			<View style={[globalStyles.horizontalAlignment, styles.distanceInfo]}>
-				<Ionicons name="map-outline" size={12} color={Colors.darkGray} />
-				<ThemedText dark>Distance</ThemedText>
-			</View>
-
-			<View style={[globalStyles.horizontalAlignment, styles.distanceInfo]}>
-				<ThemedText type="sm">{formatDistance()}</ThemedText>
-
-				<View style={styles.divider} />
-
-				<ThemedText type="sm">{getStatusText()}</ThemedText>
-			</View>
 		</View>
 	)
 }
@@ -188,6 +132,7 @@ function PaymentInfo() {
 
 function MealInfo() {
 	const { features } = usePlace()
+
 	const checkAvailableMealType = () => {
 		const mealInfo = features?.food_and_drink?.meals
 		const breakfast = mealInfo?.breakfast
@@ -236,14 +181,9 @@ function RatingInfo() {
 
 	const getStars = (stars: number) => {
 		const fullStars = Math.floor(stars)
-		const halfStar = stars % 1 === 0.5
-		const emptyStars = 5 - fullStars - (halfStar ? 1 : 0)
+		const emptyStars = 5 - fullStars
 
-		const starIcons = [
-			...Array(fullStars).fill('★'),
-			...Array(halfStar ? 1 : 0).fill('☆'),
-			...Array(emptyStars).fill('✩'),
-		]
+		const starIcons = [...Array(fullStars).fill('★'), ...Array(emptyStars).fill('✩')]
 
 		return starIcons.join('')
 	}
@@ -397,17 +337,6 @@ const styles = StyleSheet.create({
 	categoryIcon: {
 		backgroundColor: Colors.darkGray,
 		borderRadius: 50,
-	},
-	addressInfo: {
-		justifyContent: 'flex-start',
-	},
-	distanceInfo: {
-		justifyContent: 'flex-end',
-	},
-	divider: {
-		height: 10,
-		borderLeftWidth: 1,
-		borderColor: Colors.gray,
 	},
 	separator: {
 		width: '100%',

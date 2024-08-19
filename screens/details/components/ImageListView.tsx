@@ -45,7 +45,7 @@ export default function ImageListView({ place }: { place: PlaceObject }) {
 				transparent={true}
 				onRequestClose={() => setIsModalVisible(false)}
 			>
-				<View style={styles.modalContent}>
+				<View style={styles.imageViewer}>
 					<ImageViewer
 						style={styles.fullscreenImage}
 						imageUrls={photos.map(uri => ({ url: uri }))}
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: AppDimensions.width,
 	},
-	modalContent: {
+	imageViewer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',

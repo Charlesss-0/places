@@ -1,8 +1,10 @@
+import { Alert, Linking } from 'react-native'
 import { ImageListView, MapView, PlaceDetails, PlaceReviews } from './components'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 
 import { Colors } from '@/constant/Colors'
+import React from 'react'
 import { RootState } from '@/redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ThemedText } from '@/components'
@@ -19,6 +21,7 @@ export default function DetailsScreen() {
 		navigation.setOptions({
 			title: name,
 			headerShadowVisible: false,
+
 			headerTransparent: true,
 			headerTitleStyle: styles.headerTitle,
 			headerTintColor: Colors.lightGray,
@@ -41,12 +44,32 @@ export default function DetailsScreen() {
 				<PlaceReviews />
 			</ScrollView>
 
-			<FooterButton />
+			<NavigationButton
+				latitude={currentItem.geocodes.main.latitude}
+				longitude={currentItem.geocodes.main.longitude}
+			/>
 		</SafeAreaView>
 	)
 }
 
-function FooterButton() {
+function NavigationButton({ latitude, longitude }: { latitude: number; longitude: number }) {
+	const openNavigationApp = async () => {
+		const wazeUrl = `waze://?ll=${latitude},${longitude}&navigate=yes`
+		const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`
+
+		try {
+			const response = await Linking.canOpenURL(wazeUrl)
+
+			if (!response) {
+				return await Linking.openURL(googleMapsUrl)
+			}
+
+			return await Linking.openURL(wazeUrl)
+		} catch (error: any) {
+			Alert.alert(`Unable to open navigation app: ${error.message}`)
+		}
+	}
+
 	return (
 		<View
 			style={{
@@ -68,6 +91,7 @@ function FooterButton() {
 					alignItems: 'center',
 				}}
 				activeOpacity={0.9}
+				onPress={openNavigationApp}
 			>
 				<ThemedText style={{ fontWeight: '500' }} light>
 					Start Trip

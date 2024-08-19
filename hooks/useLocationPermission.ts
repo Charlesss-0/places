@@ -34,7 +34,7 @@ export default function useLocationPermission() {
 				})
 			)
 		} catch (error: any) {
-			console.error('Error getting location:', error.message)
+			Alert.alert(`Error getting location: ${error.message}`)
 		}
 	}, [])
 
