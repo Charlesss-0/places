@@ -45,18 +45,27 @@ export default function DataList() {
 
 function Thumbnail({ item }: { item: PlaceObject }) {
 	const dispatch = useDispatch<AppDispatch>()
-	const { setReviews, clearReviews } = dataSlice.actions
+	const { setReviews, clearReviews, setPhotos, clearPhotos, setFetching } = dataSlice.actions
 	const photos = item.photos.map(photo => `${photo.prefix}original${photo.suffix}`)
 
 	const handlePress = async () => {
+		dispatch(clearPhotos())
 		dispatch(clearReviews())
 
-		router.push({ pathname: '/details', params: { id: item.fsq_id, name: item.name } })
+		try {
+			dispatch(setFetching('fetching'))
 
-		const { reviews } = await placesApi.fetchReviews(item.fsq_id)
+			router.push({ pathname: '/details', params: { id: item.fsq_id, name: item.name } })
 
-		if (reviews) {
-			dispatch(setReviews(reviews))
+			const { reviews } = await placesApi.fetchReviews(item.fsq_id)
+			const { photos } = await placesApi.fetchPhotos(item.fsq_id)
+
+			if (reviews) dispatch(setReviews(reviews))
+			if (photos) dispatch(setPhotos(photos))
+		} catch (error: any) {
+			Alert.alert(`Error fetching data: ${error.message}`)
+		} finally {
+			dispatch(setFetching('ready'))
 		}
 	}
 

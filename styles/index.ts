@@ -4,6 +4,9 @@ const globalStyles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
+	flex: {
+		flex: 1,
+	},
 	horizontalAlignment: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',

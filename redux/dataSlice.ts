@@ -7,6 +7,7 @@ interface DataState {
 	hasNext: boolean
 	query: string
 	category: string
+	fetching: 'fetching' | 'ready'
 }
 
 const initialState: DataState = {
@@ -16,6 +17,7 @@ const initialState: DataState = {
 	hasNext: false,
 	query: '',
 	category: 'Food',
+	fetching: 'fetching',
 }
 
 const dataSlice = createSlice({
@@ -34,6 +36,12 @@ const dataSlice = createSlice({
 		clearReviews: state => {
 			state.reviews = []
 		},
+		setPhotos: (state, action: PayloadAction<DataState['photos']>) => {
+			state.photos = action.payload
+		},
+		clearPhotos: state => {
+			state.photos = []
+		},
 		setHasNext: (state, action: PayloadAction<DataState['hasNext']>) => {
 			state.hasNext = action.payload
 		},
@@ -42,6 +50,9 @@ const dataSlice = createSlice({
 		},
 		setCategory: (state, action: PayloadAction<DataState['category']>) => {
 			state.category = action.payload
+		},
+		setFetching: (state, action: PayloadAction<DataState['fetching']>) => {
+			state.fetching = action.payload
 		},
 	},
 })

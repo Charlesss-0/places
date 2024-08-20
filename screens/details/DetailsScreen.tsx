@@ -34,7 +34,7 @@ export default function DetailsScreen() {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ImageListView place={currentItem} />
+			<ImageListView />
 
 			<ScrollView showsVerticalScrollIndicator={false}>
 				<PlaceDetails place={currentItem} />

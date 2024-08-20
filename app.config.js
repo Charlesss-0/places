@@ -6,6 +6,7 @@ export default {
 		orientation: 'portrait',
 		scheme: 'myapp',
 		userInterfaceStyle: 'automatic',
+		platforms: ['ios', 'android', 'web'],
 		splash: {
 			image: './assets/splash.png',
 			resizeMode: 'cover',

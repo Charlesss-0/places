@@ -46,6 +46,7 @@ export default function SearchSection() {
 		<View style={styles.container}>
 			<View style={styles.searchContainer}>
 				<Feather name="search" size={20} />
+
 				<TextInput
 					style={styles.input}
 					placeholder="Search"
@@ -54,10 +55,6 @@ export default function SearchSection() {
 					onChangeText={e => dispatch(setQuery(e))}
 					onSubmitEditing={handleSearch}
 				/>
-			</View>
-
-			<View style={styles.controlsContainer}>
-				<Feather name="sliders" color={Colors.lightGray} size={20} />
 			</View>
 		</View>
 	)
@@ -83,12 +80,5 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		flex: 1,
-	},
-	controlsContainer: {
-		borderRadius: 10,
-		padding: 9,
-		backgroundColor: Colors.darkGray,
-		justifyContent: 'center',
-		alignItems: 'center',
 	},
 })
