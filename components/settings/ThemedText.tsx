@@ -1,5 +1,6 @@
 import { Colors } from '@/constant/Colors'
-import { Text, type TextProps, StyleSheet } from 'react-native'
+import { type TextProps, StyleSheet } from 'react-native'
+import Animated from 'react-native-reanimated'
 
 interface ThemedTextProps extends TextProps {
 	light?: boolean
@@ -19,7 +20,7 @@ export default function ThemedText({
 	const color = light ? Colors.lightGray : dark ? Colors.darkGray : Colors.gray
 
 	return (
-		<Text
+		<Animated.Text
 			style={[
 				{ color, flex },
 				type === 'default' ? styles.default : undefined,

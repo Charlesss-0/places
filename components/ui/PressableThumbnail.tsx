@@ -24,6 +24,5 @@ export default function PressableThumbnail({ source, onPress, style }: Pressable
 const styles = StyleSheet.create({
 	imageContainer: {
 		backgroundColor: Colors.lightGray,
-		overflow: 'hidden',
 	},
 })

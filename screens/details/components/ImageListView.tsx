@@ -1,7 +1,8 @@
-import { ActivityIndicator, FlatList, Modal, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, FlatList, Modal, StyleSheet, View, ViewProps } from 'react-native'
 import { AppDimensions, Colors } from '@/constant'
 import { PressableThumbnail, ThemedImage } from '@/components'
 
+import Animated from 'react-native-reanimated'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import { RootState } from '@/redux'
 import { images } from '@/assets/images'
@@ -33,18 +34,18 @@ export default function ImageListView() {
 	}
 
 	return (
-		<View style={styles.imageListViewContainer}>
+		<Animated.View style={styles.imageListViewContainer}>
 			<FlatList
 				data={formattedPhotos}
 				keyExtractor={(item, index) => index.toString()}
 				renderItem={({ item, index }) => (
-					<View style={styles.imageWrapper}>
+					<Animated.View style={[styles.imageWrapper]}>
 						<PressableThumbnail
 							source={{ uri: item }}
 							onPress={() => handleImagePress(index)}
 							style={styles.imageWrapper}
 						/>
-					</View>
+					</Animated.View>
 				)}
 				ListEmptyComponent={
 					<ThemedImage source={images.place} style={[styles.imageWrapper, { height: '100%' }]} />
@@ -74,7 +75,7 @@ export default function ImageListView() {
 					/>
 				</View>
 			</Modal>
-		</View>
+		</Animated.View>
 	)
 }
 
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.lightGray,
 		justifyContent: 'center',
 		alignItems: 'center',
+		zIndex: 10,
 	},
 	imageViewer: {
 		flex: 1,

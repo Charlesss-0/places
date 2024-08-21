@@ -45,7 +45,7 @@ class PlacesApi {
 
 	public async fetchPhotos(fsq_id: string): Promise<{ photos: PhotoObject[] }> {
 		try {
-			const response = await apiClient.instance.get('/photos', {
+			const response = await apiClient.instance.get('/photos/test', {
 				params: {
 					id: fsq_id,
 				},
@@ -63,7 +63,7 @@ class PlacesApi {
 
 	public async fetchReviews(fsq_id: string): Promise<{ reviews: ReviewObject[] }> {
 		try {
-			const response = await apiClient.instance.get('/reviews', {
+			const response = await apiClient.instance.get('/reviews/test', {
 				params: {
 					id: fsq_id,
 				},
