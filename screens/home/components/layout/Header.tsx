@@ -1,12 +1,19 @@
-import { StyleSheet, View } from 'react-native'
-import { useEffect, useState } from 'react'
+import Animated, { SharedValue, interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import React, { useEffect, useState } from 'react'
 
 import Categories from './Categories'
 import { Colors } from '@/constant/Colors'
 import SearchSection from './SearchSection'
+import { StyleSheet } from 'react-native'
 import ThemedText from '@/components/settings/ThemedText'
 
-export default function Header() {
+interface HeaderProps {
+	scrollY: SharedValue<number>
+	setHeaderHeight: React.Dispatch<React.SetStateAction<number>>
+	statusBarHeight: number
+}
+
+export default function Header({ scrollY, setHeaderHeight, statusBarHeight }: HeaderProps) {
 	const [greeting, setGreeting] = useState('')
 
 	useEffect(() => {
@@ -23,8 +30,19 @@ export default function Header() {
 		}
 	}, [])
 
+	const animatedStyle = useAnimatedStyle(() => {
+		return {
+			transform: [{ translateY: interpolate(scrollY.value, [0, 200], [0, -100], 'clamp') }],
+		}
+	})
+
 	return (
-		<View style={styles.headerContainer}>
+		<Animated.View
+			style={[styles.headerContainer, animatedStyle, { top: statusBarHeight }]}
+			onLayout={event => {
+				setHeaderHeight(event.nativeEvent.layout.height)
+			}}
+		>
 			<ThemedText type="xl" style={styles.title} dark>
 				{greeting}
 			</ThemedText>
@@ -32,7 +50,7 @@ export default function Header() {
 			<SearchSection />
 
 			<Categories />
-		</View>
+		</Animated.View>
 	)
 }
 
@@ -40,6 +58,10 @@ const styles = StyleSheet.create({
 	headerContainer: {
 		zIndex: 10,
 		backgroundColor: Colors.white,
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
 	},
 	title: {
 		marginVertical: 10,

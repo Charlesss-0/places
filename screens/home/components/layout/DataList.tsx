@@ -1,12 +1,6 @@
-import {
-	ActivityIndicator,
-	Alert,
-	FlatList,
-	StyleSheet,
-	TouchableOpacity,
-	View,
-} from 'react-native'
+import { ActivityIndicator, Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { AddressInfo, DistanceInfo, PressableThumbnail, ThemedImage } from '@/components'
+import Animated, { SharedValue, useAnimatedScrollHandler } from 'react-native-reanimated'
 import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -19,27 +13,48 @@ import { placesApi } from '@/api'
 import { router } from 'expo-router'
 import { useFetch } from '@/hooks'
 
-export default function DataList() {
+export default function DataList({
+	scrollY,
+	paddingTop,
+}: {
+	scrollY: SharedValue<number>
+	paddingTop: number
+}) {
 	const { data, hasNext } = useSelector((state: RootState) => state.data)
+	const { query, category } = useSelector((state: RootState) => state.data)
+	const currentQuery = query ? query : category
 
-	return (
-		data.length > 0 && (
-			<FlatList
-				data={data}
-				keyExtractor={({ fsq_id }) => fsq_id}
-				renderItem={({ item }) => (
-					<View style={styles.listItem}>
-						<Thumbnail item={item} />
+	const scrollHandler = useAnimatedScrollHandler(event => {
+		scrollY.value = event.contentOffset.y
+	})
 
-						<CardInfo place={item} />
-					</View>
-				)}
-				style={styles.container}
-				contentContainerStyle={[styles.listContentContainer, { paddingBottom: hasNext ? 20 : 0 }]}
-				showsVerticalScrollIndicator={false}
-				ListFooterComponent={() => <LoadMoreBtn shouldLoadMore={hasNext} />}
-			/>
-		)
+	return data.length > 0 ? (
+		<Animated.FlatList
+			data={data}
+			keyExtractor={({ fsq_id }) => fsq_id}
+			renderItem={({ item }) => (
+				<View style={styles.listItem}>
+					<Thumbnail item={item} />
+
+					<CardInfo place={item} />
+				</View>
+			)}
+			style={[styles.container, { paddingTop }]}
+			contentContainerStyle={[styles.listContentContainer, { paddingBottom: hasNext ? 20 : 0 }]}
+			showsVerticalScrollIndicator={false}
+			ListFooterComponent={() => <LoadMoreBtn shouldLoadMore={hasNext} />}
+			onScroll={scrollHandler}
+		/>
+	) : (
+		<View
+			style={{
+				flex: 1,
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+		>
+			<ThemedText dark>No results found for {currentQuery}</ThemedText>
+		</View>
 	)
 }
 
