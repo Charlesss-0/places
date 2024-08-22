@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 
-import { Colors } from '@/constant'
+import { Colors } from '@/constants'
 import { FontAwesome6 } from '@expo/vector-icons'
 import ThemedText from '../settings/ThemedText'
 import globalStyles from '@/styles'

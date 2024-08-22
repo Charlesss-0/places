@@ -10,7 +10,7 @@ import { ImageListView, MapView, PlaceDetails, PlaceReviews } from './components
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { AntDesign } from '@expo/vector-icons'
-import { Colors } from '@/constant/Colors'
+import { Colors } from '@/constants/Colors'
 import { RootState } from '@/redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ThemedText } from '@/components'

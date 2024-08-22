@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 
-import { Colors } from '@/constant'
+import { Colors } from '@/constants'
 import { RootState } from '@/redux'
 import ThemedImage from '@/components/settings/ThemedImage'
 import { ThemedText } from '@/components'

@@ -3,7 +3,7 @@ import { AntDesign, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-ic
 import { PlaceProvider, usePlace } from '../context/PlaceContext'
 import { StyleSheet, View } from 'react-native'
 
-import { Colors } from '@/constant'
+import { Colors } from '@/constants'
 import ThemedImage from '@/components/settings/ThemedImage'
 import globalStyles from '@/styles'
 

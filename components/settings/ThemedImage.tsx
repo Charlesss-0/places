@@ -1,6 +1,6 @@
 import { Image, ImageProps, StyleSheet } from 'react-native'
 
-import { Colors } from '@/constant'
+import { Colors } from '@/constants'
 
 export default function ThemedImage({ ...rest }: ImageProps) {
 	return <Image style={styles.image} {...rest} />

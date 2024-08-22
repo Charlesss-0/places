@@ -5,7 +5,7 @@ import {
 	type TouchableOpacityProps,
 } from 'react-native'
 
-import { Colors } from '@/constant'
+import { Colors } from '@/constants'
 import ThemedImage from '../settings/ThemedImage'
 
 interface PressableThumbnailProps extends TouchableOpacityProps {

@@ -2,7 +2,7 @@ import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Colors } from '@/constant/Colors'
+import { Colors } from '@/constants/Colors'
 import ThemedText from '@/components/settings/ThemedText'
 import { categories } from '@/data'
 import { useFetch } from '@/hooks'

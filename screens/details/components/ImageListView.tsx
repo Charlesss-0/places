@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, Modal, StyleSheet, View, ViewProps } from 'react-native'
-import { AppDimensions, Colors } from '@/constant'
+import { AppDimensions, Colors } from '@/constants'
 import { PressableThumbnail, ThemedImage } from '@/components'
 
 import Animated from 'react-native-reanimated'

@@ -2,7 +2,7 @@ import { Alert, StyleSheet, TextInput, View } from 'react-native'
 import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Colors } from '@/constant/Colors'
+import { Colors } from '@/constants/Colors'
 import Feather from '@expo/vector-icons/Feather'
 import { useFetch } from '@/hooks'
 import { useRef } from 'react'

@@ -1,10 +1,16 @@
-import { ActivityIndicator, Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
+import {
+	ActivityIndicator,
+	Alert,
+	FlatList,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 import { AddressInfo, DistanceInfo, PressableThumbnail, ThemedImage } from '@/components'
-import Animated, { SharedValue, useAnimatedScrollHandler } from 'react-native-reanimated'
 import { AppDispatch, RootState, dataSlice } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Colors } from '@/constant/Colors'
+import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import ThemedText from '@/components/settings/ThemedText'
 import globalStyles from '@/styles'
@@ -13,23 +19,27 @@ import { placesApi } from '@/api'
 import { router } from 'expo-router'
 import { useFetch } from '@/hooks'
 
-export default function DataList({
-	scrollY,
-	paddingTop,
-}: {
-	scrollY: SharedValue<number>
-	paddingTop: number
-}) {
-	const { data, hasNext } = useSelector((state: RootState) => state.data)
-	const { query, category } = useSelector((state: RootState) => state.data)
+export default function DataList() {
+	const { loading } = useSelector((state: RootState) => state.app)
+	const { data, hasNext, query, category } = useSelector((state: RootState) => state.data)
 	const currentQuery = query ? query : category
 
-	const scrollHandler = useAnimatedScrollHandler(event => {
-		scrollY.value = event.contentOffset.y
-	})
+	if (loading && !data.length) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
+				<ActivityIndicator size="large" color={Colors.darkGray} />
+			</View>
+		)
+	}
 
-	return data.length > 0 ? (
-		<Animated.FlatList
+	return (
+		<FlatList
 			data={data}
 			keyExtractor={({ fsq_id }) => fsq_id}
 			renderItem={({ item }) => (
@@ -39,22 +49,22 @@ export default function DataList({
 					<CardInfo place={item} />
 				</View>
 			)}
-			style={[styles.container, { paddingTop }]}
+			ListEmptyComponent={
+				<View
+					style={{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<ThemedText dark>No results found for "{currentQuery.toLowerCase()}"</ThemedText>
+				</View>
+			}
+			ListFooterComponent={() => <LoadMoreBtn shouldLoadMore={hasNext} />}
+			style={styles.container}
 			contentContainerStyle={[styles.listContentContainer, { paddingBottom: hasNext ? 20 : 0 }]}
 			showsVerticalScrollIndicator={false}
-			ListFooterComponent={() => <LoadMoreBtn shouldLoadMore={hasNext} />}
-			onScroll={scrollHandler}
 		/>
-	) : (
-		<View
-			style={{
-				flex: 1,
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}
-		>
-			<ThemedText dark>No results found for {currentQuery}</ThemedText>
-		</View>
 	)
 }
 
@@ -180,6 +190,11 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingHorizontal: 20,
+	},
+	headerContainer: {
+		backgroundColor: Colors.lightGray,
+		padding: 20,
+		zIndex: 1,
 	},
 	listContentContainer: {
 		gap: 30,
